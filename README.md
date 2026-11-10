@@ -1,6 +1,6 @@
 👉 **[Buy Me a Coffee — buymeacoffee.com/mistah](https://buymeacoffee.com/mistah)**
 
-# Animated Blink (`obs-blink-filter`) 
+# Animated Blink (`blink-filter`) 
 
 Ever wanted to make an overlay, a "REC" dot, a text prompt, or a webcam border blink in OBS without building a cursed maze of Move Transition filters or clunky nested scenes? 
 
