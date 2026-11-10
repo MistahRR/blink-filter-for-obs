@@ -49,9 +49,8 @@ Instead of a boring on/off toggle, you can pick independent **Disappear** and **
 
 ---
 
-### Support the project ☕
+### Support me ☕
 
-I build tools, plugins, and weird creative experiments in my spare time. This plugin is 100% free and open-source (GPLv2), but if it saves your stream layout or spares you a massive headache, you can fuel my next late-night coding session right here:
 
 👉 **[Buy Me a Coffee — buymeacoffee.com/mistah](https://buymeacoffee.com/mistah)**
 
@@ -78,4 +77,4 @@ Filtre OBS pour n'importe quelle source : texte, image, média, navigateur, grou
 * **Consommation :** Coût nul (passage direct) quand la source est cachée ou fixe. Un seul rendu GPU négligeable pendant la transition.
 * **Bon à savoir :** Les glissements/zooms restent dans le cadre de la source (utilise un Groupe ou un filtre « Rogner / Remplir » pour élargir la zone). Le son d'une source média n'est pas coupé.
 
-☕ **Soutenir le projet :** **[buymeacoffee.com/mistah](https://buymeacoffee.com/mistah)**
+☕ **J'adore le café :** **[buymeacoffee.com/mistah](https://buymeacoffee.com/mistah)**
