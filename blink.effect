@@ -1,0 +1,82 @@
+uniform float4x4 ViewProj;
+uniform texture2d image;
+uniform float opacity;
+uniform float2 wipe_dir;
+uniform float wipe_off;
+uniform float wipe_p;
+uniform float glitch;
+uniform float seed;
+uniform float2 texel;
+uniform float pixel;
+
+sampler_state def_sampler {
+	Filter   = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+struct VertInOut {
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
+};
+
+VertInOut VSDefault(VertInOut vert_in)
+{
+	VertInOut vert_out;
+	vert_out.pos = mul(float4(vert_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv  = vert_in.uv;
+	return vert_out;
+}
+
+float rand1(float n)
+{
+	return frac(sin(n * 12.9898 + seed * 78.233) * 43758.5453);
+}
+
+float4 PSDraw(VertInOut vert_in) : TARGET
+{
+	float2 uv = vert_in.uv;
+
+	/* pixelisation */
+	if (pixel > 1.0) {
+		float2 cell = texel * pixel;
+		uv = (floor(uv / cell) + 0.5) * cell;
+	}
+
+	float4 c;
+	if (glitch > 0.0) {
+		/* bandes horizontales décalées + séparation RVB */
+		float band = floor(uv.y * 24.0);
+		float r = rand1(band);
+		float shift = 0.0;
+		if (r < 0.35 * min(glitch, 1.0))
+			shift = (rand1(band + 7.0) - 0.5) * 0.25 * glitch;
+		float2 guv = float2(uv.x + shift, uv.y);
+		float split = 0.012 * glitch;
+		float4 cr = image.Sample(def_sampler, guv + float2(split, 0.0));
+		float4 cg = image.Sample(def_sampler, guv);
+		float4 cb = image.Sample(def_sampler, guv - float2(split, 0.0));
+		c = float4(cr.r, cg.g, cb.b, max(cr.a, max(cg.a, cb.a)));
+		if (guv.x < 0.0 || guv.x > 1.0)
+			c = float4(0.0, 0.0, 0.0, 0.0);
+	} else {
+		c = image.Sample(def_sampler, uv);
+	}
+
+	/* volet (wipe) */
+	if (wipe_p <= 1.0) {
+		float d = dot(vert_in.uv, wipe_dir) + wipe_off;
+		c *= saturate((wipe_p * 1.01 - d) / 0.01);
+	}
+
+	return c * opacity;
+}
+
+technique Draw
+{
+	pass
+	{
+		vertex_shader = VSDefault(vert_in);
+		pixel_shader  = PSDraw(vert_in);
+	}
+}
